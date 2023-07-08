@@ -4,14 +4,6 @@ const path = require('path')
 module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
-  async rewrites() {
-    return [
-      {
-        source: '/swagger/',
-        destination: 'http://localholst:5099/swagger/',
-      }
-    ]
-  },
   webpack: config => {
     config.resolve.alias = {
       ...config.resolve.alias,
