@@ -9,6 +9,6 @@ namespace AspNetNextJsMUIApp.Data
         {
         }
 
-        public DbSet<Student> Students { get; set; }
+        public required DbSet<Student> Students { get; set; }
     }
 }

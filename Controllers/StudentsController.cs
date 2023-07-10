@@ -20,10 +20,6 @@ namespace AspNetNextJsMUIApp.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            if (_context.Students == null)
-            {
-                return NotFound();
-            }
             return await _context.Students.ToListAsync();
         }
 
@@ -31,10 +27,6 @@ namespace AspNetNextJsMUIApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(string id)
         {
-            if (_context.Students == null)
-            {
-                return NotFound();
-            }
             var student = await _context.Students.FindAsync(id);
 
             if (student == null)
@@ -48,7 +40,7 @@ namespace AspNetNextJsMUIApp.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(string id, Student student)
+        public async Task<IActionResult> PutStudent(string id, [Bind("Id,Name,Age,Course,Note")] Student student)
         {
             if (id != student.Id)
             {
@@ -79,12 +71,8 @@ namespace AspNetNextJsMUIApp.Controllers
         // POST: api/Students
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudent(Student student)
+        public async Task<ActionResult<Student>> PostStudent([Bind("Id,Name,Age,Course,Note")] Student student)
         {
-            if (_context.Students == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Students' is null.");
-            }
             _context.Students.Add(student);
             try
             {
@@ -102,17 +90,13 @@ namespace AspNetNextJsMUIApp.Controllers
                 }
             }
 
-            return CreatedAtAction("GetStudent", new { id = student.Id }, student);
+            return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student);
         }
 
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(string id)
         {
-            if (_context.Students == null)
-            {
-                return NotFound();
-            }
             var student = await _context.Students.FindAsync(id);
             if (student == null)
             {
@@ -127,7 +111,7 @@ namespace AspNetNextJsMUIApp.Controllers
 
         private bool StudentExists(string id)
         {
-            return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.Students.Any(e => e.Id == id);
         }
     }
 }
